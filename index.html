@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRIBE — Coming Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Anton', sans-serif;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Background gradient drift */
+  body.main-loaded {
+    background: linear-gradient(120deg, #111, #222, #111);
+    background-size: 400% 400%;
+    animation: bgDrift 20s ease infinite;
+  }
+
+  @keyframes bgDrift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Navigation tabs */
+  nav {
+    position: fixed;
+    top: 1rem;
+    display: flex;
+    gap: 2.5rem;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 20;
+  }
+
+  nav a {
+    color: #dcdcdc;
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  nav a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  }
+
+  /* Intro overlay */
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  .intro-logo {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(6rem, 20vw, 12rem);
+    color: #e0e0e0;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  /* Homepage content */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  .main-logo {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(4rem, 12vw, 8rem);
+    color: #e0e0e0;
+    letter-spacing: 0.05em;
+    transition: transform 0.5s ease, text-shadow 0.5s ease;
+  }
+
+  .main-logo:hover {
+    transform: scale(1.08);
+    text-shadow: 0 0 35px rgba(255,255,255,0.45);
+  }
+
+  .coming-soon {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    color: #e0e0e0;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="join.html">Join</a>
+</nav>
+
+<div class="intro-overlay">
+  <div class="intro-logo" id="introLogo">BRIBE</div>
+</div>
+
+<div class="main-content" id="mainContent">
+  <div class="main-logo">BRIBE</div>
+  <div class="coming-soon">COMING SOON</div>
+</div>
+
+<script>
+const introLogo = document.getElementById('introLogo');
+const introOverlay = document.querySelector('.intro-overlay');
+const mainContent = document.getElementById('mainContent');
+const mainNav = document.getElementById('mainNav');
+const body = document.body;
+
+// Easing function for smooth zoom
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t +2, 3)/2;
+}
+
+const duration = 2500; // 2.5s for zoom/fade
+const initialDelay = 1000; // 1s hold before zoom
+
+function showMainContent() {
+  introOverlay.style.display = 'none';
+  body.classList.add('main-loaded');
+  mainContent.style.opacity = 1;
+  mainNav.style.opacity = 1;
+}
+
+// Check if intro has already been seen in this session
+if (sessionStorage.getItem('introSeen')) {
+  showMainContent(); // Skip animation
+} else {
+  sessionStorage.setItem('introSeen', 'true');
+
+  let startTime = null;
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let elapsed = timestamp - startTime;
+
+    if (elapsed < initialDelay) {
+      introLogo.style.opacity = 1;
+      requestAnimationFrame(animate);
+      return;
+    }
+
+    let t = (elapsed - initialDelay) / duration;
+    if (t > 1) t = 1;
+
+    const eased = easeInOutCubic(t);
+    introLogo.style.transform = `scale(${0.9 + 0.6 * eased})`;
+    introLogo.style.opacity = `${1 - eased}`;
+
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      showMainContent();
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+</script>
+
+</body>
+</html>
+
