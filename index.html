@@ -1,13 +1,14 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>BRIBE — Coming Soon</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 <style>
   html, body {
     margin: 0;
+    padding: 0;
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -18,7 +19,7 @@
     justify-content: center;
   }
 
-  /* Background gradient drift */
+  /* Responsive gradient drift background */
   body.main-loaded {
     background: linear-gradient(120deg, #111, #222, #111);
     background-size: 400% 400%;
@@ -36,8 +37,8 @@
     position: fixed;
     top: 1rem;
     display: flex;
-    gap: 2.5rem;
-    font-size: 1.1rem;
+    gap: 2rem;
+    font-size: 1rem;
     letter-spacing: 0.05em;
     opacity: 0;
     transition: opacity 1s ease;
@@ -67,8 +68,7 @@
   }
 
   .intro-logo {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(6rem, 20vw, 12rem);
+    font-size: clamp(4rem, 18vw, 12rem);
     color: #e0e0e0;
     letter-spacing: 0.05em;
     opacity: 0;
@@ -85,27 +85,58 @@
     text-align: center;
     opacity: 0;
     transition: opacity 1s ease;
+    padding: 0 1rem;
   }
 
   .main-logo {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(4rem, 12vw, 8rem);
+    font-size: clamp(3.5rem, 15vw, 8rem);
     color: #e0e0e0;
     letter-spacing: 0.05em;
     transition: transform 0.5s ease, text-shadow 0.5s ease;
+    text-align: center;
+    word-break: break-word;
   }
 
   .main-logo:hover {
-    transform: scale(1.08);
+    transform: scale(1.05);
     text-shadow: 0 0 35px rgba(255,255,255,0.45);
   }
 
   .coming-soon {
-    font-family: 'Anton', sans-serif;
-    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-size: clamp(1.2rem, 5vw, 2.5rem);
     color: #e0e0e0;
     letter-spacing: 0.04em;
   }
+
+  /* Mobile adjustments */
+  @media (max-width: 600px) {
+    nav {
+      top: 0.75rem;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      color: #ccc;
+    }
+
+    .main-logo {
+      transform: scale(1);
+    }
+
+    .coming-soon {
+      margin-top: 0.5rem;
+    }
+
+    .intro-logo {
+      font-size: clamp(4rem, 25vw, 8rem);
+    }
+
+    body {
+      overflow: hidden;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -132,13 +163,13 @@ const mainContent = document.getElementById('mainContent');
 const mainNav = document.getElementById('mainNav');
 const body = document.body;
 
-// Easing function for smooth zoom
+// Smooth easing
 function easeInOutCubic(t) {
   return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t +2, 3)/2;
 }
 
-const duration = 2500; // 2.5s for zoom/fade
-const initialDelay = 1000; // 1s hold before zoom
+const duration = 2500;
+const initialDelay = 1000;
 
 function showMainContent() {
   introOverlay.style.display = 'none';
@@ -147,13 +178,12 @@ function showMainContent() {
   mainNav.style.opacity = 1;
 }
 
-// Check if intro has already been seen in this session
 if (sessionStorage.getItem('introSeen')) {
-  showMainContent(); // Skip animation
+  showMainContent();
 } else {
   sessionStorage.setItem('introSeen', 'true');
-
   let startTime = null;
+
   function animate(timestamp) {
     if (!startTime) startTime = timestamp;
     let elapsed = timestamp - startTime;
@@ -171,11 +201,8 @@ if (sessionStorage.getItem('introSeen')) {
     introLogo.style.transform = `scale(${0.9 + 0.6 * eased})`;
     introLogo.style.opacity = `${1 - eased}`;
 
-    if (t < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      showMainContent();
-    }
+    if (t < 1) requestAnimationFrame(animate);
+    else showMainContent();
   }
 
   requestAnimationFrame(animate);
@@ -184,4 +211,3 @@ if (sessionStorage.getItem('introSeen')) {
 
 </body>
 </html>
-
