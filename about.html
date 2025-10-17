@@ -1,76 +1,88 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BRIBE — About</title>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — BRIBE</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Anton', sans-serif;
+    background: linear-gradient(120deg, #111, #222, #111);
+    background-size: 400% 400%;
+    animation: bgDrift 20s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 
-  <style>
-    html,body{
-      margin:0;
-      height:100%;
-      width:100%;
-      background: linear-gradient(120deg,#141414,#1e1e1e,#141414);
-      background-size:400% 400%;
-      animation:bgShift 18s ease infinite;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      color:#f2f2f2;
-      font-family:'Anton',sans-serif;
-      text-align:center;
-    }
+  @keyframes bgDrift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-    @keyframes bgShift{
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
+  nav {
+    position: fixed;
+    top: 1rem;
+    display: flex;
+    gap: 2rem;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    opacity: 1;
+    z-index: 20;
+  }
 
-    nav{
-      position:fixed;
-      top:1rem;
-      display:flex;
-      gap:3rem;
-      font-size:1.1rem;
-      letter-spacing:0.05em;
-    }
+  nav a {
+    color: #dcdcdc;
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
 
-    nav a{
-      color:#dcdcdc;
-      text-decoration:none;
-      transition:color .3s ease,text-shadow .3s ease;
-    }
+  nav a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  }
 
-    nav a:hover{
-      color:#ffffff;
-      text-shadow:0 0 10px rgba(255,255,255,0.5);
-    }
+  .content {
+    text-align: center;
+    color: #e0e0e0;
+    padding: 1rem;
+    max-width: 600px;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 0.3s;
+  }
 
-    .logo{
-      font-family:'Anton',sans-serif;
-      font-size:clamp(4rem,12vw,8rem);
-      letter-spacing:0.04em;
-      opacity:0;
-      transform:scale(0.9);
-      animation:fadeZoom 2.5s ease forwards;
-      transition:transform .5s ease,text-shadow .5s ease;
-      user-select:none;
-    }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
 
-    .logo:hover{
-      transform:scale(1.08);
-      text-shadow:0 0 35px rgba(255,255,255,0.45);
-    }
+  h1 {
+    font-size: clamp(3rem, 12vw, 6rem);
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+  }
 
-    @keyframes fadeZoom{
-      0%{opacity:0;transform:scale(0.9);}
-      60%{opacity:1;transform:scale(1.05);}
-      100%{opacity:1;transform:scale(1);}
+  p {
+    font-size: clamp(1rem, 3.5vw, 1.5rem);
+    line-height: 1.5;
+    color: #cfcfcf;
+  }
+
+  @media (max-width: 600px) {
+    nav {
+      top: 0.75rem;
+      gap: 1.25rem;
+      font-size: 0.9rem;
     }
-  </style>
+  }
+</style>
 </head>
 <body>
   <nav>
@@ -79,6 +91,14 @@
     <a href="join.html">Join</a>
   </nav>
 
-  <div class="logo">COMING SOON</div>
+  <div class="content">
+    <h1>ABOUT</h1>
+    <p>
+      BRIBE is more than a name — it’s an identity in motion.<br>
+      A symbol of restraint, luxury, and silence.<br><br>
+      This page is a glimpse into the foundation — what’s being built behind the curtain.  
+      Stay tuned for what comes next.
+    </p>
+  </div>
 </body>
 </html>
