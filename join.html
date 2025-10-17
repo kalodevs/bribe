@@ -13,13 +13,17 @@
     width: 100%;
     overflow: hidden;
     font-family: 'Anton', sans-serif;
-    background: linear-gradient(120deg, #111, #222, #111);
-    background-size: 400% 400%;
-    animation: bgDrift 20s ease infinite;
+    background: #000;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+  }
+
+  body.main-loaded {
+    background: linear-gradient(120deg, #111, #222, #111);
+    background-size: 400% 400%;
+    animation: bgDrift 20s ease infinite;
   }
 
   @keyframes bgDrift {
@@ -35,7 +39,8 @@
     gap: 2rem;
     font-size: 1rem;
     letter-spacing: 0.05em;
-    opacity: 1;
+    opacity: 0;
+    transition: opacity 1s ease;
     z-index: 20;
   }
 
@@ -50,17 +55,31 @@
     text-shadow: 0 0 10px rgba(255,255,255,0.5);
   }
 
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  }
+
+  .intro-logo {
+    font-size: clamp(4rem, 18vw, 12rem);
+    color: #e0e0e0;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
   .content {
     text-align: center;
     color: #e0e0e0;
     padding: 1rem;
     max-width: 600px;
     opacity: 0;
-    animation: fadeIn 1s ease forwards 0.3s;
-  }
-
-  @keyframes fadeIn {
-    to { opacity: 1; }
+    transition: opacity 1s ease;
   }
 
   h1 {
@@ -103,21 +122,73 @@
 </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="join.html">Join</a>
-  </nav>
 
-  <div class="content">
-    <h1>JOIN</h1>
-    <p>
-      The doors aren’t open yet.<br>
-      But they will be.<br><br>
-      When BRIBE expands, you’ll know first.
-    </p>
+<nav id="mainNav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="join.html">Join</a>
+</nav>
 
-    <a href="#" class="cta">Notify Me</a>
-  </div>
+<div class="intro-overlay">
+  <div class="intro-logo" id="introLogo">JOIN</div>
+</div>
+
+<div class="content" id="mainContent">
+  <h1>JOIN</h1>
+  <p>
+    The doors aren’t open yet.<br>
+    But they will be.<br><br>
+    When BRIBE expands, you’ll know first.
+  </p>
+
+  <a href="https://discord.gg/bribe" target="_blank" class="cta">Join Discord</a>
+</div>
+
+<script>
+const introLogo = document.getElementById('introLogo');
+const introOverlay = document.querySelector('.intro-overlay');
+const mainContent = document.getElementById('mainContent');
+const mainNav = document.getElementById('mainNav');
+const body = document.body;
+
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t +2, 3)/2;
+}
+
+const duration = 2000;
+const initialDelay = 500;
+
+function showMainContent() {
+  introOverlay.style.display = 'none';
+  body.classList.add('main-loaded');
+  mainContent.style.opacity = 1;
+  mainNav.style.opacity = 1;
+}
+
+let startTime = null;
+function animate(timestamp) {
+  if (!startTime) startTime = timestamp;
+  let elapsed = timestamp - startTime;
+
+  if (elapsed < initialDelay) {
+    introLogo.style.opacity = 1;
+    requestAnimationFrame(animate);
+    return;
+  }
+
+  let t = (elapsed - initialDelay) / duration;
+  if (t > 1) t = 1;
+
+  const eased = easeInOutCubic(t);
+  introLogo.style.transform = `scale(${0.9 + 0.6 * eased})`;
+  introLogo.style.opacity = `${1 - eased}`;
+
+  if (t < 1) requestAnimationFrame(animate);
+  else showMainContent();
+}
+
+requestAnimationFrame(animate);
+</script>
+
 </body>
 </html>
